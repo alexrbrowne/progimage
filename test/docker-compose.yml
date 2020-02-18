@@ -1,0 +1,50 @@
+version: "3"
+services:
+
+  upload:
+      build: ../upload/
+      networks:
+        - foxy
+      hostname: upload
+      depends_on:
+        - redis
+      expose:
+        - 80
+      volumes:
+        - ./images:/images
+
+  download:
+      build: ../download/
+      networks:
+        - foxy
+      hostname: download
+      depends_on:
+        - redis
+      expose:
+        - 80
+      volumes:
+        - ./images:/images
+        
+  redis:
+      image: "redis:alpine"
+      hostname: redis
+      networks:
+        - foxy
+      expose:
+        - 6379
+
+  specs:
+      build: ./spec
+      depends_on:
+        - upload
+        - download
+      networks:
+        - foxy
+      volumes:
+          - ./samples:/specs/samples
+          - ./images:/images
+          - ./downloads:/downloads
+          - ./spec:/specs/spec
+
+networks:
+  foxy:

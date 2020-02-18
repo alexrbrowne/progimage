@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Values.redis.fullname }}
+  labels:
+    app: {{ .Values.redis.fullname }}
+spec:
+  replicas: {{ .Values.redis.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.redis.fullname }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.redis.fullname }}
+    spec:
+      containers:
+        - name: {{ .Values.redis.fullname }}
+          image: {{ .Values.redis.image }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          ports:
+            - name: redistcp
+              containerPort: 6379

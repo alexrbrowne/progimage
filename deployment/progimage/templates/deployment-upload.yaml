@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Values.upload.fullname }}
+  labels:
+    app: {{ .Values.upload.fullname }}
+spec:
+  replicas: {{ .Values.upload.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.upload.fullname }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.upload.fullname }}
+    spec:
+      volumes:
+        - name: images-vol
+          persistentVolumeClaim:
+            claimName: images
+      containers:
+        - name: {{ .Values.upload.fullname }}
+          image: {{ .Values.upload.image }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          volumeMounts:
+            - mountPath: /images
+              name: images-vol
+              readOnly: false
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP

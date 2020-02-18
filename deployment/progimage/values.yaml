@@ -1,0 +1,29 @@
+# Default values for baget.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+app:
+  fullname: progimage
+
+upload:
+  fullname: upload
+  replicaCount: 1
+  image: alexrbrowne/progimage-upload:0.0.1
+  ingress:
+    path: /upload
+download:
+  fullname: download
+  replicaCount: 1
+  image: alexrbrowne/progimage-download:0.0.1
+  ingress:
+    path: /download
+redis:
+  fullname: redis
+  replicaCount: 1
+  image: redis:alpine
+
+pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
